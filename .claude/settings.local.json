@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(node -e \"const si = require\\('react-icons/si'\\); ['SiCsharp','SiDotnet','SiBlazor','SiRust','SiNuget','SiTypescript','SiJavascript','SiReact','SiNextdotjs','SiExpo','SiTailwindcss','SiHtml5','SiCss3','SiNodedotjs','SiAnthropic','SiGit','SiGithub','SiGithubactions','SiMongodb','SiCanva','SiDocker','SiMicrosoftsqlserver','SiRider','SiWindows','SiJetbrains'].forEach\\(n => console.log\\(n, !!si[n]\\)\\)\")",
+      "Bash(node -e \"const si = require\\('react-icons/si'\\); ['SiCplusplus','SiSharp','SiMicrosoft','SiSqlite','SiPostgresql','SiMysql','SiDatabase','SiVisualstudio','SiCss','SiWindows11'].forEach\\(n => console.log\\(n, !!si[n]\\)\\)\")",
+      "Bash(node -e \"const si = require\\('react-icons/si'\\); Object.keys\\(si\\).filter\\(k => k.toLowerCase\\(\\).includes\\('sharp'\\) || k.toLowerCase\\(\\).includes\\('sql'\\) || k.toLowerCase\\(\\).includes\\('window'\\)\\).forEach\\(k => console.log\\(k\\)\\)\")",
+      "Bash(node -e \"const si = require\\('react-icons/si'\\); Object.keys\\(si\\).filter\\(k => k.toLowerCase\\(\\).includes\\('c'\\) && k.length < 8\\).slice\\(0,20\\).forEach\\(k => console.log\\(k\\)\\)\")",
+      "Bash(node -e \"const si = require\\('react-icons/si'\\); ['SiCsharpstation','SiCSharp','SiMicrosoftsqlserver','SiSqlserver','SiSql'].forEach\\(n => console.log\\(n, !!si[n]\\)\\)\")",
+      "Bash(node -e \"const {SiSharp, SiDotnet} = require\\('react-icons/si'\\); console.log\\('SiSharp displayName:', SiSharp.displayName || SiSharp.name\\)\")"
+    ]
+  }
+}
