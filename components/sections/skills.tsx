@@ -1,6 +1,6 @@
 "use client";
 import { motion, useInView } from "framer-motion";
-import { useRef, cloneElement } from "react";
+import { useRef } from "react";
 import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
 import { Layers, Server, Database, Wrench, Monitor } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
@@ -60,7 +60,7 @@ function TechBadge({ name }: { name: string }) {
     <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/3 text-neutral-300 text-sm font-mono whitespace-nowrap hover:border-violet-500/40 hover:text-violet-300 transition-all duration-200">
       {skill && (
         <span className="text-sm leading-none shrink-0" style={{ color: skill.color }}>
-          {cloneElement(skill.icon, { color: skill.color })}
+          {skill.icon}
         </span>
       )}
       {name}
