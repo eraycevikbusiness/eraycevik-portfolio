@@ -16,8 +16,9 @@ function AuroraBg() {
 
 export function ContactSection() {
   const t = useT().contact;
-  const [data, setData] = useState({ name: "", email: "", subject: "", message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
+  const [data, setData] = useState({ name: "", email: "", subject: "", message: "", website: "" });
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error" | "rate_limited">("idle");
+  const [retryAt, setRetryAt] = useState<number | null>(null);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -31,24 +32,34 @@ export function ContactSection() {
   };
   const valid = !errors.name && !errors.email && !errors.message;
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ name: true, email: true, subject: true, message: true });
     if (!valid) return;
     setStatus("sending");
-    const to = "eray.cevik.business@gmail.com";
-    const subj = encodeURIComponent(data.subject || "Portfolio · Anfrage");
-    const body = encodeURIComponent(`${data.message}\n\n— ${data.name} <${data.email}>`);
-    setTimeout(() => {
-      window.location.href = `mailto:${to}?subject=${subj}&body=${body}`;
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (res.status === 429) {
+        const json = await res.json().catch(() => ({}));
+        setRetryAt(json.retryAt ?? null);
+        setStatus("rate_limited");
+        return;
+      }
+      if (!res.ok) { setStatus("error"); return; }
       setStatus("sent");
-    }, 800);
+    } catch {
+      setStatus("error");
+    }
   };
 
   const channels = [
-    { label: t.labels.github,   value: "github.com/Eray594",       href: "https://github.com/Eray594" },
-    { label: t.labels.linkedin, value: "linkedin.com/in/eraykaan", href: "https://linkedin.com/in/eraykaan" },
-    { label: t.labels.twitter,  value: "@eraykaan_dev",            href: "https://x.com/eraykaan_dev" },
+    { label: t.labels.github,   value: "github.com/eraycevikbusiness",          href: "https://github.com/eraycevikbusiness" },
+    { label: t.labels.linkedin, value: "linkedin.com/in/eraykaan-318965274",    href: "https://www.linkedin.com/in/eraykaan-318965274/" },
+    { label: t.labels.email,    value: "eray.cevik.business@gmail.com",         href: "mailto:eray.cevik.business@gmail.com" },
   ];
 
   const inputCls = "w-full rounded-xl border border-white/10 bg-ink-100/60 px-4 py-3.5 text-[15px] text-white placeholder:text-white/25 outline-none transition focus:border-accent-violet/50 focus:bg-ink-100";
@@ -86,6 +97,17 @@ export function ContactSection() {
           <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-ink-50/60 p-6 md:p-8">
             <AuroraBg />
             <form onSubmit={submit} className="relative space-y-5">
+              {/* Honeypot — hidden from real users, bots fill it */}
+              <input
+                type="text"
+                name="website"
+                value={data.website}
+                onChange={set("website")}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: "fixed", left: "-9999px", top: "-9999px", width: 0, height: 0, overflow: "hidden", opacity: 0 }}
+              />
               <div className="grid gap-5 md:grid-cols-2">
                 <label className="block">
                   <div className="mb-2 flex items-baseline justify-between">
@@ -161,8 +183,37 @@ export function ContactSection() {
                         {t.sent}
                       </motion.span>
                     )}
+                    {(status === "error" || status === "rate_limited") && (
+                      <motion.span key="e" initial={{ y: 16, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -16, opacity: 0 }} className="flex items-center gap-2 text-red-600">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                          <path d="M7 2v6M7 10.5v.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                        </svg>
+                        {status === "rate_limited" ? "Zu viele Anfragen" : "Fehler – nochmal versuchen"}
+                      </motion.span>
+                    )}
                   </AnimatePresence>
                 </button>
+                {(status === "error" || status === "rate_limited") && (
+                  <div className="flex flex-col gap-1">
+                    {status === "rate_limited" && retryAt && (
+                      <span className="font-mono text-[11px] text-white/40">
+                        wieder möglich um{" "}
+                        <span className="text-white/70">
+                          {new Date(retryAt).toLocaleTimeString("de-CH", { hour: "2-digit", minute: "2-digit" })} Uhr
+                        </span>
+                      </span>
+                    )}
+                    {status === "error" && (
+                      <button
+                        type="button"
+                        onClick={() => setStatus("idle")}
+                        className="font-mono text-[11px] text-white/40 underline underline-offset-2 hover:text-white/70 text-left"
+                      >
+                        Erneut versuchen
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </form>
           </div>

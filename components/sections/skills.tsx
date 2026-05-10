@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n";
 
@@ -255,16 +255,25 @@ function BentoCard({
   title: string; desc: string; badges: string[];
   accentClass: string; kicker: string; visual: React.ReactNode; className?: string;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const onMove = (e: React.MouseEvent) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
   return (
-    <div className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-ink-100 card-hover ${className}`}
-      style={{ position: "relative" }}
+    <div
+      ref={ref}
+      onMouseMove={onMove}
+      className={`group relative overflow-hidden rounded-2xl border border-white/10 bg-ink-100 card-hover min-h-50 ${className}`}
     >
       <div
         className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         style={{ background: "radial-gradient(400px circle at var(--mx,50%) var(--my,50%), rgba(167,139,250,0.18), transparent 40%)" }}
       />
       {visual}
-      <div className="relative flex h-full flex-col p-7">
+      <div className="relative flex flex-col p-7">
         <div className="flex flex-wrap gap-1.5">
           {badges.map((b, i) => (
             <span key={i} className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/4 px-2 py-1 font-mono text-[10px] tracking-tight text-white/75">
@@ -273,7 +282,7 @@ function BentoCard({
             </span>
           ))}
         </div>
-        <div className="mt-auto pt-10">
+        <div className="pt-10">
           <div className={`mb-2 font-mono text-[10px] uppercase tracking-[0.22em] ${accentClass}`}>{kicker}</div>
           <h3 className="text-2xl font-medium tracking-tight md:text-3xl">{title}</h3>
           <p className="mt-3 max-w-md text-sm leading-relaxed text-white/55">{desc}</p>
@@ -319,7 +328,7 @@ export function SkillsSection() {
         <MarqueeRow labels={stackRows[2]} direction="left" />
       </div>
 
-      <div className="mt-14 grid gap-3 md:grid-cols-6" style={{ gridAutoRows: "220px" }}>
+      <div className="mt-14 grid gap-3 md:grid-cols-6">
         <BentoCard
           className="md:col-span-3 md:row-span-2"
           title={t.cards[0][0]} desc={t.cards[0][1]}

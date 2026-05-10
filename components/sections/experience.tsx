@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n";
 const expMeta = [
   { chips: ["C#", ".NET", "SQL Server", "Git", "Agile / Scrum"], accentClass: "bg-accent-violet" },
   { chips: ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "GitHub Actions"], accentClass: "bg-accent-fuchsia" },
-  { chips: ["JavaScript", "C#", "HTML", "CSS", "Git"], accentClass: "bg-accent-cyan" },
+  { chips: ["Python", "C#", "Discord.net", "Git", "MongoDB", ".NET"], accentClass: "bg-accent-cyan" },
 ];
 
 export function ExperienceSection() {
