@@ -153,7 +153,7 @@ const translations = {
       avail: ["Aktuell verfügbar für", "Side-Projects", "&", "Open-Source-Mitarbeit"],
       labels: { github: "GitHub", linkedin: "LinkedIn", email: "E-Mail" },
     },
-    footer: { top: "↑ Top", proj: "Projekte", cont: "Kontakt" },
+    footer: { top: "↑ Top", proj: "Projekte", cont: "Kontakt", impr: "Impressum", priv: "Datenschutz" },
   },
 
   en: {
@@ -305,7 +305,7 @@ const translations = {
       avail: ["Currently available for", "side projects", "&", "open-source contributions"],
       labels: { github: "GitHub", linkedin: "LinkedIn", email: "E-Mail" },
     },
-    footer: { top: "↑ Top", proj: "Projects", cont: "Contact" },
+    footer: { top: "↑ Top", proj: "Projects", cont: "Contact", impr: "Legal Notice", priv: "Privacy Policy" },
   },
 
   tr: {
@@ -457,7 +457,7 @@ const translations = {
       avail: ["Şu anda", "yan projeler", "&", "open-source katkı için müsait"],
       labels: { github: "GitHub", linkedin: "LinkedIn", email: "E-Mail" },
     },
-    footer: { top: "↑ Yukarı", proj: "Projeler", cont: "İletişim" },
+    footer: { top: "↑ Yukarı", proj: "Projeler", cont: "İletişim", impr: "Künye", priv: "Gizlilik Politikası" },
   },
 };
 

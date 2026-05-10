@@ -159,7 +159,7 @@ export function Navbar() {
       >
         <div className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-500 md:px-10 ${scrolled ? "py-3" : "py-5"}`}>
           {/* Brand */}
-          <a href="#hero" className="flex items-center gap-3">
+          <a href="/#hero" className="flex items-center gap-3">
             <div className="relative">
               <div className="grid h-9 w-9 place-items-center rounded-lg border border-white/15 bg-black font-mono text-[12px] font-semibold tracking-tight">
                 <span>EK</span>
@@ -179,7 +179,7 @@ export function Navbar() {
               return (
                 <a
                   key={item.id}
-                  href={`#${item.id}`}
+                  href={`/#${item.id}`}
                   className={`group relative rounded-full px-3.5 py-1.5 text-[13px] tracking-tight transition-colors ${isActive ? "bg-white/10 text-white" : "text-white/55 hover:text-white/85"}`}
                 >
                   <span className="relative flex items-center gap-1.5">
@@ -196,7 +196,7 @@ export function Navbar() {
             <LanguageSwitcher />
             <div className="hidden md:block">
               <a
-                href="#contact"
+                href="/#contact"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white px-4 py-2 text-[13px] font-medium text-black transition hover:bg-white/90"
               >
                 {t.nav.cta}
@@ -246,7 +246,7 @@ export function Navbar() {
               {navItems.map((item, i) => (
                 <motion.a
                   key={item.id}
-                  href={`#${item.id}`}
+                  href={`/#${item.id}`}
                   onClick={() => setMenuOpen(false)}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -261,7 +261,7 @@ export function Navbar() {
                 </motion.a>
               ))}
               <a
-                href="#contact"
+                href="/#contact"
                 onClick={() => setMenuOpen(false)}
                 className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-base font-medium text-black"
               >
