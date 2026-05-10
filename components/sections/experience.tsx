@@ -1,115 +1,79 @@
 "use client";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { cn } from "@/lib/utils";
-import { useLanguage } from "@/lib/i18n";
+import { motion } from "framer-motion";
+import { useT } from "@/lib/i18n";
 
-const experienceCompanies = ["Digitec Galaxus AG", "MudForge (Eigenprojekt)", "Eigeninitiative"] as const;
-const experienceTech = [
-  ["C#", ".NET", "SQL Server", "Git", "Agile / Scrum"],
-  ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "GitHub Actions"],
-  ["JavaScript", "C#", "HTML", "CSS", "Git"],
+const expMeta = [
+  { chips: ["C#", ".NET", "SQL Server", "Git", "Agile / Scrum"], accentClass: "bg-accent-violet" },
+  { chips: ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "GitHub Actions"], accentClass: "bg-accent-fuchsia" },
+  { chips: ["JavaScript", "C#", "HTML", "CSS", "Git"], accentClass: "bg-accent-cyan" },
 ];
-const experienceColors = ["violet", "blue", "emerald"] as const;
-
-const colorMap = {
-  violet: { dot: "border-violet-500 shadow-violet-500/30", inner: "bg-violet-500", tag: "bg-violet-500/10 text-violet-300 border-violet-500/20", line: "bg-violet-500/40" },
-  blue:   { dot: "border-blue-500 shadow-blue-500/30",     inner: "bg-blue-500",   tag: "bg-blue-500/10 text-blue-300 border-blue-500/20",         line: "bg-blue-500/40" },
-  emerald:{ dot: "border-emerald-500 shadow-emerald-500/30",inner: "bg-emerald-500",tag: "bg-emerald-500/10 text-emerald-300 border-emerald-500/20", line: "bg-emerald-500/40" },
-};
-
-function ExperienceItem({ index, isLast }: { index: number; isLast: boolean }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const { t } = useLanguage();
-  const exp = t.experience.items[index];
-  const colors = colorMap[experienceColors[index]];
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, x: -30 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.7, delay: index * 0.15 }}
-      className="flex gap-8 relative"
-    >
-      {!isLast && (
-        <div className="absolute left-4.25 top-12 bottom-0 w-px">
-          <motion.div
-            className={cn("w-full h-full", colors.line)}
-            initial={{ scaleY: 0 }}
-            animate={inView ? { scaleY: 1 } : {}}
-            transition={{ duration: 1, delay: index * 0.15 + 0.3 }}
-            style={{ transformOrigin: "top" }}
-          />
-        </div>
-      )}
-
-      <div className="shrink-0 mt-1">
-        <div className={cn("w-9 h-9 rounded-full border-2 flex items-center justify-center shadow-lg", colors.dot)}>
-          <div className={cn("w-3 h-3 rounded-full", colors.inner)} />
-        </div>
-      </div>
-
-      <div className="flex-1 pb-16">
-        <div className="flex flex-wrap items-center gap-3 mb-2">
-          <span className={cn("px-3 py-1 rounded-full text-xs font-mono border", colors.tag)}>{exp.period}</span>
-          <span className="text-neutral-600 text-xs font-mono">{exp.location}</span>
-        </div>
-
-        <h3 className="text-xl font-bold text-white mb-1">{exp.role}</h3>
-        <p className="text-violet-400 font-medium text-sm mb-5">{experienceCompanies[index]}</p>
-
-        <ul className="space-y-2.5 mb-6">
-          {exp.highlights.map((h, i) => (
-            <motion.li
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: index * 0.15 + 0.4 + i * 0.07 }}
-              className="flex items-start gap-3 text-neutral-400 text-sm"
-            >
-              <span className="mt-2 w-1.5 h-1.5 rounded-full bg-neutral-600 shrink-0" />
-              {h}
-            </motion.li>
-          ))}
-        </ul>
-
-        <div className="flex flex-wrap gap-2">
-          {experienceTech[index].map((t) => (
-            <span key={t} className="px-2.5 py-1 rounded-md bg-white/4 border border-white/8 text-neutral-500 text-xs font-mono">
-              {t}
-            </span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 export function ExperienceSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const { t } = useLanguage();
+  const t = useT().experience;
+  const items = t.items.map((it, i) => ({ ...it, ...expMeta[i] }));
 
   return (
-    <section id="experience" ref={ref} className="relative py-32 bg-black overflow-hidden">
-      <div className="absolute top-0 right-0 w-100 h-100 rounded-full bg-violet-600/4 blur-[100px] pointer-events-none" />
-
-      <div className="relative z-10 max-w-4xl mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
-          <p className="font-mono text-violet-400 text-sm tracking-widest uppercase mb-4">{t.experience.label}</p>
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-16 leading-tight">
-            {t.experience.title1}<br />
-            <span className="bg-linear-to-r from-violet-400 to-pink-400 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: "text" }}>
-              {t.experience.title2}
-            </span>
-          </h2>
+    <section id="experience" className="relative mx-auto max-w-7xl px-6 py-28 md:px-10 md:py-36 bg-linear-to-b from-black via-ink-50/30 to-black">
+      <div className="mb-14 md:mb-20 flex flex-col gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }}
+          className="flex items-center gap-3"
+        >
+          <span className="h-px w-10 bg-white/20" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">{t.eyebrow}</span>
         </motion.div>
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
+          className="max-w-4xl text-5xl font-medium tracking-tight text-white md:text-7xl"
+        >
+          {t.title1}{t.title2 ? " " : ""}{t.title2 ? <span className="font-serif italic text-white/70">{t.title2}</span> : null}
+        </motion.h2>
+      </div>
 
-        <div>
-          {t.experience.items.map((_, i) => (
-            <ExperienceItem key={i} index={i} isLast={i === t.experience.items.length - 1} />
+      <div className="relative">
+        <div className="absolute left-4.5 top-2 bottom-2 w-px bg-linear-to-b from-white/0 via-white/15 to-white/0 md:left-1/2 md:-translate-x-1/2" />
+
+        <div className="space-y-12 md:space-y-20">
+          {items.map((e, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, delay: i * 0.05 }}
+              className={`relative grid gap-6 md:grid-cols-2 md:gap-16 ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}
+            >
+              <div className="absolute left-3 top-1.5 z-10 h-3.5 w-3.5 rounded-full border-2 border-black md:left-1/2 md:-translate-x-1/2">
+                <span className={`block h-full w-full rounded-full ${e.accentClass} shadow-[0_0_18px_rgba(167,139,250,0.6)]`} />
+              </div>
+
+              <div className={`pl-10 md:pl-0 ${i % 2 === 1 ? "md:pl-16" : "md:pr-16 md:text-right"}`}>
+                <div className="font-mono text-[11px] uppercase tracking-[0.22em] text-white/45">{e.range}</div>
+                <div className="mt-1 text-sm text-white/55">{e.where}</div>
+              </div>
+
+              <div className={`pl-10 md:pl-0 ${i % 2 === 1 ? "md:pr-16 md:text-right" : "md:pl-16"}`}>
+                <h3 className="text-2xl font-medium tracking-tight md:text-3xl">{e.role}</h3>
+                <div className="mt-1 text-base text-white/60">{e.org}</div>
+
+                <ul className={`mt-5 space-y-2.5 text-[14.5px] leading-relaxed text-white/65 ${i % 2 === 1 ? "md:text-right" : ""}`}>
+                  {e.bullets.map((b, j) => (
+                    <li key={j} className={`flex gap-3 ${i % 2 === 1 ? "md:flex-row-reverse" : ""}`}>
+                      <span className={`mt-2 h-1 w-1 shrink-0 rounded-full ${e.accentClass} opacity-80`} />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className={`mt-5 flex flex-wrap gap-1.5 ${i % 2 === 1 ? "md:justify-end" : ""}`}>
+                  {e.chips.map((c, j) => (
+                    <span key={j} className="rounded-md border border-white/10 bg-white/3 px-2 py-1 font-mono text-[10px] tracking-tight text-white/70">{c}</span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
           ))}
         </div>
       </div>

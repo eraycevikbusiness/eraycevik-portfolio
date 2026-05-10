@@ -7,7 +7,11 @@
       "Bash(node -e \"const si = require\\('react-icons/si'\\); Object.keys\\(si\\).filter\\(k => k.toLowerCase\\(\\).includes\\('sharp'\\) || k.toLowerCase\\(\\).includes\\('sql'\\) || k.toLowerCase\\(\\).includes\\('window'\\)\\).forEach\\(k => console.log\\(k\\)\\)\")",
       "Bash(node -e \"const si = require\\('react-icons/si'\\); Object.keys\\(si\\).filter\\(k => k.toLowerCase\\(\\).includes\\('c'\\) && k.length < 8\\).slice\\(0,20\\).forEach\\(k => console.log\\(k\\)\\)\")",
       "Bash(node -e \"const si = require\\('react-icons/si'\\); ['SiCsharpstation','SiCSharp','SiMicrosoftsqlserver','SiSqlserver','SiSql'].forEach\\(n => console.log\\(n, !!si[n]\\)\\)\")",
-      "Bash(node -e \"const {SiSharp, SiDotnet} = require\\('react-icons/si'\\); console.log\\('SiSharp displayName:', SiSharp.displayName || SiSharp.name\\)\")"
+      "Bash(node -e \"const {SiSharp, SiDotnet} = require\\('react-icons/si'\\); console.log\\('SiSharp displayName:', SiSharp.displayName || SiSharp.name\\)\")",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(mkdir -p /tmp/design_extracted)",
+      "Read(//tmp/**)",
+      "Bash(tar xf *)"
     ]
   }
 }

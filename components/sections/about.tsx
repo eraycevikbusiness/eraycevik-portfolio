@@ -1,79 +1,103 @@
 "use client";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { SpotlightCard } from "@/components/ui/spotlight";
-import { Code2, Zap, Globe, Coffee } from "lucide-react";
-import { useLanguage } from "@/lib/i18n";
+import { motion } from "framer-motion";
+import { useT } from "@/lib/i18n";
 
-const statIcons = [<Zap size={20} key="zap" />, <Globe size={20} key="globe" />, <Code2 size={20} key="code" />, <Coffee size={20} key="coffee" />];
-const statValues = ["19", "EFZ", "MIT", "∞"];
-
-const containerVariants = { hidden: {}, visible: { transition: { staggerChildren: 0.12 } } };
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 80, damping: 16 } },
-};
+const tags = ["C#", "Rust", "Blazor", "Razor", "Avalonia UI", "WPF", "Claude AI", "TypeScript"];
 
 export function AboutSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-  const { t } = useLanguage();
-  const { p1, p2, p3, stats } = t.about;
+  const t = useT();
+  const a = t.about;
 
   return (
-    <section id="about" ref={ref} className="relative py-32 bg-black overflow-hidden">
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-125 h-125 rounded-full bg-blue-600/5 blur-[100px]" />
+    <section id="about" className="relative mx-auto max-w-7xl px-6 py-28 md:px-10 md:py-36">
+      {/* Section header */}
+      <div className="mb-14 md:mb-20 flex flex-col gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="flex items-center gap-3"
+        >
+          <span className="h-px w-10 bg-white/20" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">{a.eyebrow}</span>
+        </motion.div>
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
+          className="max-w-4xl text-5xl font-medium tracking-tight text-white md:text-7xl"
+        >
+          {a.title1} <span className="font-serif italic text-white/70">{a.title2}</span>
+        </motion.h2>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6">
-        <motion.div variants={containerVariants} initial="hidden" animate={inView ? "visible" : "hidden"}>
-          <motion.p variants={itemVariants} className="font-mono text-violet-400 text-sm tracking-widest uppercase mb-4">
-            {t.about.label}
+      <div className="grid gap-12 md:grid-cols-12">
+        {/* Bio */}
+        <div className="md:col-span-7 space-y-6 text-[17px] leading-relaxed text-white/70">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+          >
+            {a.p1_pre}<span className="text-white">{a.p1_name}</span>{a.p1_mid}<span className="text-white">{a.p1_org}</span>{a.p1_post}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            {a.p2_pre}<span className="text-white">{a.p2_age}</span>{a.p2_mid}<span className="text-white">{a.p2_proj}</span>{a.p2_post}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            {a.p3}
           </motion.p>
 
-          <motion.h2 variants={itemVariants} className="text-5xl md:text-7xl font-black text-white mb-16 leading-tight">
-            {t.about.title1}<br />
-            <span className="bg-linear-to-r from-violet-400 to-blue-400 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: "text" }}>
-              {t.about.title2}
-            </span>
-          </motion.h2>
-
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <motion.div variants={itemVariants} className="space-y-6">
-              <p className="text-neutral-300 text-lg leading-relaxed">
-                {p1.pre}<span className="text-white font-semibold">Eray Kaan Cevik</span>
-                {p1.mid1}<span className="text-violet-400 font-semibold">{p1.role}</span>
-                {p1.mid2}<span className="text-white font-semibold">Digitec Galaxus</span>
-                {p1.post}
-              </p>
-              <p className="text-neutral-400 text-base leading-relaxed">
-                {p2.pre}<span className="text-violet-300 font-medium">MudForge</span>{p2.post}
-              </p>
-              <p className="text-neutral-500 text-base leading-relaxed">{p3}</p>
-
-              <div className="pt-4 flex flex-wrap gap-3">
-                {["C#", "Rust", "Blazor", "Razor", "Avalonia UI", "WPF", "Claude AI", "Scrum"].map((tech) => (
-                  <span key={tech} className="px-3 py-1.5 rounded-lg border border-white/10 text-neutral-400 text-sm font-mono hover:border-violet-500/50 hover:text-violet-300 transition-colors duration-200">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div variants={containerVariants} className="grid grid-cols-2 gap-4">
-              {stats.map((label, i) => (
-                <motion.div key={label} variants={itemVariants}>
-                  <SpotlightCard className="p-6 h-full group cursor-default">
-                    <div className="text-violet-400/60 group-hover:text-violet-400 transition-colors mb-3">{statIcons[i]}</div>
-                    <div className="text-4xl font-black text-white mb-1">{statValues[i]}</div>
-                    <div className="text-sm text-neutral-500">{label}</div>
-                  </SpotlightCard>
-                </motion.div>
-              ))}
-            </motion.div>
+          <div className="flex flex-wrap gap-2 pt-4">
+            {tags.map((label, i) => (
+              <motion.span
+                key={label}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.04 }}
+                className="chip"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-violet/80" />
+                {label}
+              </motion.span>
+            ))}
           </div>
-        </motion.div>
+        </div>
+
+        {/* Stats grid */}
+        <div className="md:col-span-5">
+          <div className="grid grid-cols-2 gap-3">
+            {a.stats.map((s, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-ink-100/60 p-6"
+              >
+                <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-accent-violet/10 blur-2xl transition group-hover:bg-accent-violet/25" />
+                <div className="font-serif text-5xl tracking-tight md:text-6xl">{s[0]}</div>
+                <div className="mt-3 text-sm text-white/70">{s[1]}</div>
+                <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/35">{s[2]}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );

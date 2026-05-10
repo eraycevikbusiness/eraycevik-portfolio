@@ -1,137 +1,115 @@
 "use client";
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
-import { GithubIcon } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
-import { useLanguage } from "@/lib/i18n";
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useT } from "@/lib/i18n";
 
-const projectTitles = ["MudForge", "Interne Tools", "Portfolio"] as const;
-const projectTech = [
-  ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "localStorage"],
-  ["C#", ".NET", "SQL Server", "Git", "Agile"],
-  ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS", "Claude AI"],
+const projectsMeta = [
+  { chips: ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "localStorage"], accent: "from-violet-500/40 via-fuchsia-500/20", glyph: "MF", featured: true,  href: "https://github.com/Eray594/MudForge" },
+  { chips: ["C#", ".NET", "SQL Server", "Git", "Agile"],                               accent: "from-cyan-500/30 via-blue-500/10",    glyph: "DG", featured: false, href: "https://www.digitec.ch/" },
+  { chips: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS", "i18n"],         accent: "from-emerald-500/25 via-teal-500/10", glyph: "PF", featured: false, href: "#hero" },
 ];
-const projectColors = ["violet", "blue", "emerald"] as const;
-const projectFeatured = [true, false, false];
 
-const colorMap = {
-  violet: { tag: "text-violet-400 bg-violet-500/10 border-violet-500/20", glow: "from-violet-500/20", badge: "bg-violet-500/10 border-violet-500/20 text-violet-300" },
-  blue:   { tag: "text-blue-400 bg-blue-500/10 border-blue-500/20",       glow: "from-blue-500/20",   badge: "bg-blue-500/10 border-blue-500/20 text-blue-300" },
-  emerald:{ tag: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20", glow: "from-emerald-500/20", badge: "bg-emerald-500/10 border-emerald-500/20 text-emerald-300" },
-};
+function ProjectCard({ p, index }: { p: ReturnType<typeof useT>["projects"]["items"][0] & typeof projectsMeta[0]; index: number }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const onMove = (e: React.MouseEvent) => {
+    const el = ref.current; if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
 
-function ProjectCard({ index }: { index: number }) {
-  const [hovered, setHovered] = useState(false);
-  const { t } = useLanguage();
-  const item = t.projects.items[index];
-  const colors = colorMap[projectColors[index]];
-  const featured = projectFeatured[index];
+  const isExternal = p.href.startsWith("http");
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 40 }}
+    <motion.a
+      ref={ref}
+      href={p.href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noreferrer" : undefined}
+      onMouseMove={onMove}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className={cn(
-        "group relative rounded-2xl border border-white/8 bg-[#080808] overflow-hidden",
-        "hover:border-white/15 transition-all duration-500",
-        featured ? "md:col-span-2" : ""
-      )}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.7, delay: index * 0.08, ease: [0.2, 0.7, 0.2, 1] }}
+      className={`group relative block overflow-hidden rounded-3xl border border-white/10 bg-ink-100/50 card-hover ${p.featured ? "md:col-span-2" : ""}`}
     >
-      <motion.div
-        className={cn("absolute inset-0 pointer-events-none bg-linear-to-br to-transparent opacity-0", colors.glow)}
-        animate={{ opacity: hovered ? 1 : 0 }}
-        transition={{ duration: 0.4 }}
+      <div
+        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: "radial-gradient(500px circle at var(--mx,50%) var(--my,50%), rgba(167,139,250,0.18), transparent 40%)" }}
       />
 
-      <div className={cn("relative p-7", featured ? "md:flex md:gap-12" : "")}>
-        <div className={featured ? "flex-1" : ""}>
-          <div className="flex items-center justify-between mb-5">
-            <span className={cn("px-3 py-1 rounded-full text-xs font-semibold border font-mono", colors.tag)}>
-              {item.tag}
-            </span>
-            <div className="flex items-center gap-3">
-              <a href="#" aria-label="GitHub" className="text-neutral-600 hover:text-white transition-colors"><GithubIcon size={16} /></a>
-              <a href="#" aria-label="Live" className="text-neutral-600 hover:text-white transition-colors"><ExternalLink size={16} /></a>
-            </div>
-          </div>
+      {/* Card header */}
+      <div className={`relative h-56 overflow-hidden border-b border-white/10 bg-linear-to-br ${p.accent} to-transparent`}>
+        <div className="absolute inset-0 bg-grid opacity-30 mask-radial-soft" />
+        <div className="absolute inset-0 bg-dot opacity-20" />
+        <div className="absolute -right-2 -bottom-4 select-none font-serif text-[180px] leading-none tracking-tighter text-white/10 italic">
+          {p.glyph}
+        </div>
+        <div className="absolute left-5 top-5 flex items-center gap-2">
+          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">{p.tag}</span>
+        </div>
+        <div className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 backdrop-blur transition group-hover:border-white/40 group-hover:bg-white/10">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+            <path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </div>
 
-          <h3 className="text-2xl font-bold text-white mb-3 flex items-center gap-2">
-            {projectTitles[index]}
-            <motion.span animate={{ x: hovered ? 4 : 0, y: hovered ? -4 : 0, opacity: hovered ? 1 : 0 }} transition={{ duration: 0.2 }}>
-              <ArrowUpRight size={20} className="text-neutral-500" />
-            </motion.span>
-          </h3>
+      <div className="relative p-7">
+        <h3 className="text-3xl font-medium tracking-tight md:text-4xl">{p.title}</h3>
+        <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-white/60">{p.desc}</p>
 
-          <p className="text-neutral-400 text-sm leading-relaxed mb-6">{item.description}</p>
-
-          <div className="flex flex-wrap gap-2">
-            {projectTech[index].map((t) => (
-              <span key={t} className={cn("px-2 py-1 rounded-md border text-xs font-mono", colors.badge)}>{t}</span>
-            ))}
-          </div>
+        <div className="mt-6 flex flex-wrap gap-1.5">
+          {p.chips.map((c, i) => (
+            <span key={i} className="rounded-md border border-white/10 bg-white/3 px-2 py-1 font-mono text-[10px] tracking-tight text-white/70">{c}</span>
+          ))}
         </div>
 
-        {featured && (
-          <div className="flex flex-col justify-center gap-6 mt-8 md:mt-0 md:min-w-40">
-            {item.metrics.map((m) => (
-              <div key={m.label}>
-                <div className="text-3xl font-black text-white">{m.value}</div>
-                <div className="text-xs text-neutral-500 mt-1">{m.label}</div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {!featured && (
-          <div className="flex gap-8 mt-6 pt-6 border-t border-white/6">
-            {item.metrics.map((m) => (
-              <div key={m.label}>
-                <div className="text-xl font-bold text-white">{m.value}</div>
-                <div className="text-xs text-neutral-500">{m.label}</div>
-              </div>
-            ))}
-          </div>
-        )}
+        <div className="mt-6 flex flex-wrap items-center gap-6 border-t border-white/10 pt-5">
+          {p.metrics.map((m, i) => (
+            <div key={i}>
+              <div className="font-serif text-2xl tracking-tight">{m[0]}</div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/40">{m[1]}</div>
+            </div>
+          ))}
+        </div>
       </div>
-    </motion.article>
+    </motion.a>
   );
 }
 
 export function ProjectsSection() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const { t } = useLanguage();
+  const t = useT().projects;
+  const items = t.items.map((it, i) => ({ ...it, ...projectsMeta[i] }));
 
   return (
-    <section id="projects" ref={ref} className="relative py-32 bg-black overflow-hidden">
-      <div className="absolute inset-0 flex items-end justify-center pointer-events-none">
-        <div className="w-150 h-75 rounded-full bg-blue-600/5 blur-[100px]" />
+    <section id="projects" className="relative mx-auto max-w-7xl px-6 py-28 md:px-10 md:py-36">
+      <div className="mb-14 md:mb-20 flex flex-col gap-6">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.6 }}
+          className="flex items-center gap-3"
+        >
+          <span className="h-px w-10 bg-white/20" />
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/50">{t.eyebrow}</span>
+        </motion.div>
+        <motion.h2
+          initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.2, 0.7, 0.2, 1] }}
+          className="max-w-4xl text-5xl font-medium tracking-tight text-white md:text-7xl"
+        >
+          {t.title1} <span className="font-serif italic text-white/70">{t.title2}</span>
+        </motion.h2>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
-          <p className="font-mono text-violet-400 text-sm tracking-widest uppercase mb-4">{t.projects.label}</p>
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-16">
-            <h2 className="text-5xl md:text-7xl font-black text-white leading-tight">
-              {t.projects.title1}<br />
-              <span className="bg-linear-to-r from-violet-400 to-emerald-400 bg-clip-text text-transparent" style={{ WebkitBackgroundClip: "text" }}>
-                {t.projects.title2}
-              </span>
-            </h2>
-            <a href="#" className="flex items-center gap-2 text-neutral-400 hover:text-white text-sm transition-colors border-b border-neutral-700 hover:border-white pb-1">
-              {t.projects.viewAll} <ArrowUpRight size={14} />
-            </a>
-          </div>
-        </motion.div>
+      <div className="mb-10 flex items-center justify-between">
+        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-white/45">{t.featured}</span>
+        <a href="#contact" className="ulink font-mono text-[11px] uppercase tracking-[0.2em] text-white/70">{t.all}</a>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[0, 1, 2].map((i) => <ProjectCard key={i} index={i} />)}
-        </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        {items.map((p, i) => <ProjectCard key={p.title + i} p={p} index={i} />)}
       </div>
     </section>
   );
