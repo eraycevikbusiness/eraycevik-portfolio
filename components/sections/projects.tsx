@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n";
 
 const projectsMeta = [
+  { chips: ["Desktop App", "SQLite", "macOS", "Windows", "Linux", "Claude AI"],        accent: "from-orange-500/40 via-amber-500/20", glyph: "PW", featured: true,  href: "https://www.prowtein.app/" },
   { chips: ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "localStorage"], accent: "from-violet-500/40 via-fuchsia-500/20", glyph: "MF", featured: true,  href: "https://github.com/Eray594/MudForge" },
   { chips: ["C#", ".NET", "SQL Server", "Git", "Agile"],                               accent: "from-cyan-500/30 via-blue-500/10",    glyph: "DG", featured: false, href: "https://www.galaxus.ch/" },
   { chips: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS", "i18n"],         accent: "from-emerald-500/25 via-teal-500/10", glyph: "PF", featured: false, href: "#hero" },

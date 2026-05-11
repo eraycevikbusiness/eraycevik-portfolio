@@ -68,6 +68,12 @@ const translations = {
       all: "Alle Projekte →",
       items: [
         {
+          tag: "Desktop · Open Source",
+          title: "Prowtein",
+          desc: "Minimaler nativer Desktop-Ernährungstracker — lokal, schnell, kein Konto. Lebensmittelbibliothek, Tagesansicht, visuelle Wochenfortschritte. Alle Daten bleiben eine SQLite-Datei auf deinem Rechner. Mit Claude vibe-coded.",
+          metrics: [["< 3 MB", "Binary"], ["SQLite", "Lokal"]],
+        },
+        {
           tag: "Open Source · Featured",
           title: "MudForge",
           desc: "MIT-lizenzierte NuGet-Library, die das Theming in Blazor-Apps mit MudBlazor vereinfacht. Unterstützt Dark/Light Mode, automatische System-Theme-Erkennung und persistente Speicherung im localStorage.",
@@ -220,6 +226,12 @@ const translations = {
       all: "All projects →",
       items: [
         {
+          tag: "Desktop · Open Source",
+          title: "Prowtein",
+          desc: "Minimal native desktop nutrition tracker — local, fast, no account needed. Food library, daily view, visual weekly progress. All data stays in a SQLite file on your machine. Vibe-coded with Claude.",
+          metrics: [["< 3 MB", "Binary"], ["SQLite", "Local"]],
+        },
+        {
           tag: "Open Source · Featured",
           title: "MudForge",
           desc: "MIT-licensed NuGet library that simplifies theming in Blazor apps with MudBlazor. Supports dark/light mode, automatic system-theme detection and persistent storage via localStorage.",
@@ -371,6 +383,12 @@ const translations = {
       featured: "// öne çıkan",
       all: "Tüm projeler →",
       items: [
+        {
+          tag: "Masaüstü · Open Source",
+          title: "Prowtein",
+          desc: "Minimal native masaüstü beslenme takip uygulaması — yerel, hızlı, hesap gerektirmiyor. Besin kütüphanesi, günlük görünüm, görsel haftalık ilerleme. Tüm veriler makinende SQLite dosyasında saklanır. Claude ile vibe-coded.",
+          metrics: [["< 3 MB", "Binary"], ["SQLite", "Yerel"]],
+        },
         {
           tag: "Open Source · Öne çıkan",
           title: "MudForge",
