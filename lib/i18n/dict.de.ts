@@ -27,6 +27,7 @@ export type Dictionary = {
     eyebrow: string; title1: string; title2: string; sub: string;
     cards: [string, string][];
     kickers: string[];
+    rows: string[];
   };
   projects: { eyebrow: string; title1: string; title2: string; featured: string; all: string; items: ProjectItem[] };
   experience: { eyebrow: string; title1: string; title2: string; items: ExperienceItem[] };
@@ -55,11 +56,11 @@ export const dict: Dictionary = {
   },
   hero: {
     role: "Lernender Informatiker EFZ · Galaxus",
-    status: "Verfügbar · 2026",
+    status: "In Ausbildung · offen für Nebenjobs",
     eyebrow1: "Developer",
     eyebrow2: "Full Stack",
     eyebrow3: ".NET & Web",
-    sub: "19 Jahre alt, aus der Schweiz — mit 14 als Autodidakt angefangen, heute Lernender bei Galaxus und immer am Bauen.",
+    sub: "19 Jahre alt, aus der Schweiz — mit 14 als Autodidakt angefangen, heute Lernender bei Galaxus und immer ehrgeizig.",
     cta1: "Projekte ansehen",
     cta2: "Kontakt aufnehmen",
     scroll: "scroll",
@@ -99,6 +100,7 @@ export const dict: Dictionary = {
       ["Open Source & Tooling", "Git, GitHub Actions, Docker und NuGet-Publishing. Ich lerne täglich Neues — in der Ausbildung und durch eigene Projekte."],
     ],
     kickers: ["// .NET", "// Web", "// AI", "// OSS"],
+    rows: ["// daily", "// working with", "// currently learning"],
   },
   projects: {
     eyebrow: "03 — Projekte",
@@ -122,14 +124,14 @@ export const dict: Dictionary = {
       {
         tag: "Ausbildung · Galaxus",
         title: "Interne Tools",
-        desc: "Im Rahmen meiner Ausbildung bei Galaxus arbeite ich an internen Werkzeugen und lerne, wie Software in einem der grössten Schweizer E-Commerce-Unternehmen entwickelt, getestet und deployed wird.",
-        metrics: [["2023", "Seit"], ["EFZ", "Abschluss"]],
+        desc: "Im Rahmen meiner Ausbildung bei Galaxus arbeite ich an internen Werkzeugen — unter NDA, daher keine öffentlichen Details. Lerne dabei, wie Software in einem der grössten Schweizer E-Commerce-Unternehmen entwickelt, getestet und deployed wird.",
+        metrics: [["2023", "Seit"], ["NDA", "Details"]],
       },
       {
-        tag: "Web · Persönlich",
-        title: "Portfolio",
-        desc: "Dieses Portfolio wurde mithilfe von Claude AI gebaut. Pure black, vollständig animiert, dreisprachig.",
-        metrics: [["3", "Sprachen"], ["100%", "Dark Mode"]],
+        tag: "Bot · C# · Side-Project",
+        title: "Discord Bot",
+        desc: "Discord-Bot mit Discord.NET in C# gebaut — Slash-Commands, Event-Handling und persistente Konfiguration über MongoDB. Eigenes Side-Project zum Üben sauberer .NET-Backend-Architektur.",
+        metrics: [["Discord.NET", "Stack"], ["MongoDB", "Storage"]],
       },
     ],
   },

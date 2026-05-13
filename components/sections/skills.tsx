@@ -83,11 +83,14 @@ function TechIcon({ name, size = 14 }: { name: string; size?: number }) {
   );
 }
 
-/* ── Marquee ── */
+/* ── Marquee ──
+   Row 0: daily — what I work with every day at Galaxus & on MudForge.
+   Row 1: working with — touch regularly, not daily.
+   Row 2: currently learning — actively growing into. */
 const stackRows = [
-  ["C#", ".NET Framework", "Blazor", "Avalonia", "Rust", "WPF", "ASP.NET Core", "Razor", "Entity Framework", "NuGet"],
-  ["TypeScript", "JavaScript", "React", "React Native", "Next.js", "Expo", "Tailwind CSS", "HTML", "CSS", "Node.js"],
-  ["Claude AI", "Git", "GitHub", "MongoDB", "SQL", "Canva", "GitHub Actions", "Docker", "SQL Server", "Rider"],
+  ["C#", ".NET Framework", "Blazor", "Razor", "ASP.NET Core", "Entity Framework", "NuGet", "Git", "GitHub", "SQL Server", "Rider"],
+  ["TypeScript", "JavaScript", "HTML", "CSS", "Tailwind CSS", "Docker", "GitHub Actions", "Claude AI", "MongoDB", "Canva"],
+  ["Rust", "React", "React Native", "Next.js", "Expo", "Avalonia", "WPF", "Node.js", "SQL"],
 ];
 
 function StackPill({ label }: { label: string }) {
@@ -326,10 +329,15 @@ export function SkillsSection() {
         </motion.p>
       </div>
 
-      <div className="space-y-4">
-        <MarqueeRow labels={stackRows[0]} direction="left" />
-        <MarqueeRow labels={stackRows[1]} direction="right" />
-        <MarqueeRow labels={stackRows[2]} direction="left" />
+      <div className="space-y-7">
+        {stackRows.map((row, i) => (
+          <div key={i} className="space-y-2.5">
+            <div className="px-1 font-mono text-[10px] uppercase tracking-[0.22em] text-white/40">
+              {t.rows[i]}
+            </div>
+            <MarqueeRow labels={row} direction={i % 2 === 0 ? "left" : "right"} />
+          </div>
+        ))}
       </div>
 
       <div className="mt-14 grid gap-3 md:grid-cols-6">

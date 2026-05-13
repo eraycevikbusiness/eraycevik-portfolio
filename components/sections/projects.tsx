@@ -1,16 +1,26 @@
 "use client";
 import { useRef } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useT } from "@/lib/i18n";
 
-const projectsMeta = [
-  { chips: ["Desktop App", "SQLite", "macOS", "Windows", "Linux", "Claude AI"],        accent: "from-orange-500/40 via-amber-500/20", glyph: "PW", featured: true,  href: "https://www.prowtein.app/" },
+type ProjectMeta = {
+  chips: string[];
+  accent: string;
+  glyph: string;
+  featured: boolean;
+  href: string;
+  image?: string;
+};
+
+const projectsMeta: ProjectMeta[] = [
+  { chips: ["Desktop App", "SQLite", "macOS", "Windows", "Linux", "Claude AI"],        accent: "from-orange-500/40 via-amber-500/20",   glyph: "PW", featured: true,  href: "https://www.prowtein.app/",            image: "/projects/prowtein.png" },
   { chips: ["C#", ".NET", "Blazor WebAssembly", "MudBlazor", "NuGet", "localStorage"], accent: "from-violet-500/40 via-fuchsia-500/20", glyph: "MF", featured: true,  href: "https://github.com/Eray594/MudForge" },
-  { chips: ["C#", ".NET", "SQL Server", "Git", "Agile"],                               accent: "from-cyan-500/30 via-blue-500/10",    glyph: "DG", featured: false, href: "https://www.galaxus.ch/" },
-  { chips: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS", "i18n"],         accent: "from-emerald-500/25 via-teal-500/10", glyph: "PF", featured: false, href: "#hero" },
+  { chips: ["C#", ".NET", "SQL Server", "Git", "Agile"],                               accent: "from-cyan-500/30 via-blue-500/10",      glyph: "DG", featured: false, href: "https://www.galaxus.ch/" },
+  { chips: ["C#", ".NET", "Discord.NET", "MongoDB", "Slash Commands"],                 accent: "from-indigo-500/35 via-blue-500/15",    glyph: "DB", featured: false, href: "#projects" },
 ];
 
-function ProjectCard({ p, index }: { p: ReturnType<typeof useT>["projects"]["items"][0] & typeof projectsMeta[0]; index: number }) {
+function ProjectCard({ p, index }: { p: ReturnType<typeof useT>["projects"]["items"][0] & ProjectMeta; index: number }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const onMove = (e: React.MouseEvent) => {
     const el = ref.current; if (!el) return;
@@ -41,14 +51,29 @@ function ProjectCard({ p, index }: { p: ReturnType<typeof useT>["projects"]["ite
 
       {/* Card header */}
       <div className={`relative h-56 overflow-hidden border-b border-white/10 bg-linear-to-br ${p.accent} to-transparent`}>
-        <div className="absolute inset-0 bg-grid opacity-30 mask-radial-soft" />
-        <div className="absolute inset-0 bg-dot opacity-20" />
-        <div className="absolute -right-2 -bottom-4 select-none font-serif text-[180px] leading-none tracking-tighter text-white/10 italic">
-          {p.glyph}
-        </div>
+        {p.image ? (
+          <>
+            <Image
+              src={p.image}
+              alt={p.title}
+              fill
+              sizes="(min-width: 768px) 50vw, 100vw"
+              className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/35" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-grid opacity-30 mask-radial-soft" />
+            <div className="absolute inset-0 bg-dot opacity-20" />
+            <div className="absolute -right-2 -bottom-4 select-none font-serif text-[180px] leading-none tracking-tighter text-white/10 italic">
+              {p.glyph}
+            </div>
+          </>
+        )}
         <div className="absolute left-5 top-5 flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-emerald-400 light:bg-emerald-600 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">{p.tag}</span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/85">{p.tag}</span>
         </div>
         <div className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 backdrop-blur transition group-hover:border-white/40 group-hover:bg-white/10">
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
