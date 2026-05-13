@@ -1,8 +1,16 @@
-"use client";
-import { useLang } from "@/lib/i18n";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { isLocale, type Locale } from "@/lib/i18n/config";
 
-const content = {
+type ImpressumContent = {
+  title: string;
+  back: string;
+  rows: [string, string][];
+  disclaimer: string;
+};
+
+const content: Record<Locale, ImpressumContent> = {
   de: {
     title: "Impressum",
     back: "← Zurück",
@@ -38,12 +46,31 @@ const content = {
   },
 };
 
-export default function ImpressumPage() {
-  const { lang } = useLang();
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isLocale(lang)) return {};
+  return { title: content[lang].title };
+}
+
+export default async function ImpressumPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
   const c = content[lang];
+
   return (
     <main className="mx-auto max-w-2xl px-6 pb-28 pt-36 md:px-10">
-      <Link href="/#hero" className="mb-12 inline-flex font-mono text-[11px] uppercase tracking-[0.22em] text-white/40 transition hover:text-white/70">
+      <Link
+        href={`/${lang}#hero`}
+        className="mb-12 inline-flex font-mono text-[11px] uppercase tracking-[0.22em] text-white/40 transition hover:text-white/70"
+      >
         {c.back}
       </Link>
       <h1 className="mb-10 text-4xl font-medium tracking-tight">{c.title}</h1>

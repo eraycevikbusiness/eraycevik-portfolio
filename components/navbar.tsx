@@ -1,9 +1,10 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { useLang, useT, type Language } from "@/lib/i18n";
+import { useLang, useT, type Locale } from "@/lib/i18n";
+import { localeNames } from "@/lib/i18n/config";
 
-function Flag({ code, className = "h-3.5 w-5" }: { code: Language; className?: string }) {
+function Flag({ code, className = "h-3.5 w-5" }: { code: Locale; className?: string }) {
   const cls = `${className} rounded-[3px] ring-1 ring-white/15 overflow-hidden block shrink-0`;
   if (code === "de") return (
     <svg viewBox="0 0 30 18" className={cls}>
@@ -31,12 +32,6 @@ function Flag({ code, className = "h-3.5 w-5" }: { code: Language; className?: s
   );
   return null;
 }
-
-const langLabels: Record<Language, { code: string; name: string }> = {
-  de: { code: "DE", name: "Deutsch" },
-  en: { code: "EN", name: "English" },
-  tr: { code: "TR", name: "Türkçe" },
-};
 
 function LanguageSwitcher() {
   const { lang, setLang } = useLang();
@@ -67,7 +62,7 @@ function LanguageSwitcher() {
         className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/60 py-1.5 pl-2 pr-2.5 text-[12px] font-medium tracking-tight text-white/85 backdrop-blur-xl transition hover:border-white/25 hover:text-white"
       >
         <Flag code={lang} />
-        <span className="font-mono text-[11px]">{langLabels[lang].code}</span>
+        <span className="font-mono text-[11px]">{localeNames[lang].code}</span>
         <svg className={`h-3 w-3 text-white/40 transition-transform ${open ? "rotate-180" : ""}`} viewBox="0 0 12 12" fill="none">
           <path d="M3 5l3 3 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -87,7 +82,7 @@ function LanguageSwitcher() {
             <div className="border-b border-white/5 px-3 py-2">
               <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-white/40">// language</span>
             </div>
-            {(Object.entries(langLabels) as [Language, { code: string; name: string }][]).map(([code, info]) => {
+            {(Object.entries(localeNames) as [Locale, { code: string; name: string }][]).map(([code, info]) => {
               const isActive = lang === code;
               return (
                 <button
@@ -118,9 +113,12 @@ function LanguageSwitcher() {
 
 export function Navbar() {
   const t = useT();
+  const { lang } = useLang();
   const [active, setActive] = useState("hero");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const base = `/${lang}`;
 
   const navItems = [
     { id: "about",      label: t.nav.about,      num: "01" },
@@ -159,7 +157,7 @@ export function Navbar() {
       >
         <div className={`mx-auto flex max-w-7xl items-center justify-between px-6 transition-all duration-500 md:px-10 ${scrolled ? "py-3" : "py-5"}`}>
           {/* Brand */}
-          <a href="/#hero" className="flex items-center gap-3">
+          <a href={`${base}#hero`} className="flex items-center gap-3">
             <div className="relative">
               <div className="grid h-9 w-9 place-items-center rounded-lg border border-white/15 bg-black font-mono text-[12px] font-semibold tracking-tight">
                 <span>EK</span>
@@ -179,7 +177,7 @@ export function Navbar() {
               return (
                 <a
                   key={item.id}
-                  href={`/#${item.id}`}
+                  href={`${base}#${item.id}`}
                   className={`group relative rounded-full px-3.5 py-1.5 text-[13px] tracking-tight transition-colors ${isActive ? "bg-white/10 text-white" : "text-white/55 hover:text-white/85"}`}
                 >
                   <span className="relative flex items-center gap-1.5">
@@ -196,7 +194,7 @@ export function Navbar() {
             <LanguageSwitcher />
             <div className="hidden md:block">
               <a
-                href="/#contact"
+                href={`${base}#contact`}
                 className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white px-4 py-2 text-[13px] font-medium text-black transition hover:bg-white/90"
               >
                 {t.nav.cta}
@@ -246,7 +244,7 @@ export function Navbar() {
               {navItems.map((item, i) => (
                 <motion.a
                   key={item.id}
-                  href={`/#${item.id}`}
+                  href={`${base}#${item.id}`}
                   onClick={() => setMenuOpen(false)}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -261,7 +259,7 @@ export function Navbar() {
                 </motion.a>
               ))}
               <a
-                href="/#contact"
+                href={`${base}#contact`}
                 onClick={() => setMenuOpen(false)}
                 className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-base font-medium text-black"
               >

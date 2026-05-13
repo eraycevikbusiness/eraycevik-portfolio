@@ -1,8 +1,10 @@
 "use client";
-import { useT } from "@/lib/i18n";
+import { useT, useLang } from "@/lib/i18n";
 
 export function Footer() {
   const t = useT();
+  const { lang } = useLang();
+  const base = `/${lang}`;
 
   return (
     <footer className="relative border-t border-white/10">
@@ -12,12 +14,12 @@ export function Footer() {
           <div className="text-sm text-white/60">© 2026 Eray Kaan Cevik</div>
         </div>
         <div className="flex flex-wrap items-center gap-5 font-mono text-[11px] uppercase tracking-[0.2em] text-white/40">
-          <a href="/#hero" className="ulink">{t.footer.top}</a>
-          <a href="/#projects" className="ulink">{t.footer.proj}</a>
-          <a href="/#contact" className="ulink">{t.footer.cont}</a>
+          <a href={`${base}#hero`} className="ulink">{t.footer.top}</a>
+          <a href={`${base}#projects`} className="ulink">{t.footer.proj}</a>
+          <a href={`${base}#contact`} className="ulink">{t.footer.cont}</a>
           <span className="h-3 w-px bg-white/15" aria-hidden />
-          <a href="/impressum" className="ulink">{t.footer.impr}</a>
-          <a href="/datenschutz" className="ulink">{t.footer.priv}</a>
+          <a href={`${base}/impressum`} className="ulink">{t.footer.impr}</a>
+          <a href={`${base}/datenschutz`} className="ulink">{t.footer.priv}</a>
         </div>
       </div>
       <div className="overflow-hidden border-t border-white/5 mask-fade-x">

@@ -1,15 +1,21 @@
-"use client";
-import { useLang } from "@/lib/i18n";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { isLocale, type Locale } from "@/lib/i18n/config";
 
-type Lang = "de" | "en" | "tr";
-
-const content: Record<Lang, {
-  title: string; back: string; updated: string;
-  sections: { heading: string; items: string[] }[];
-  rights_heading: string; rights: string[];
+type Section = { heading: string; items: string[] };
+type DsContent = {
+  title: string;
+  back: string;
+  updated: string;
+  sections: Section[];
+  rights_heading: string;
+  rights: string[];
   contact_note: string;
-}> = {
+  impressum_label: string;
+};
+
+const content: Record<Locale, DsContent> = {
   de: {
     title: "Datenschutz",
     back: "← Zurück",
@@ -29,10 +35,9 @@ const content: Record<Lang, {
         ],
       },
       {
-        heading: "Cookies & lokaler Speicher",
+        heading: "Cookies",
         items: [
-          "contact_sent (Cookie, httpOnly, 1 Stunde): technisches Rate-Limit nach Formular-Absenden, enthält keinen personenbezogenen Daten.",
-          "portfolio_lang (localStorage): speichert deine Sprachauswahl lokal im Browser, wird nicht übertragen.",
+          "contact_sent (Cookie, httpOnly, 1 Stunde): technisches Rate-Limit nach Formular-Absenden, enthält keine personenbezogenen Daten.",
         ],
       },
       {
@@ -52,8 +57,8 @@ const content: Record<Lang, {
     rights_heading: "Deine Rechte (revDSG / DSGVO)",
     rights: ["Auskunft", "Berichtigung", "Löschung", "Widerspruch", "Beschwerde beim EDÖB"],
     contact_note: "Anfragen: eray.cevik.business@gmail.com",
+    impressum_label: "Impressum",
   },
-
   en: {
     title: "Privacy Policy",
     back: "← Back",
@@ -73,10 +78,9 @@ const content: Record<Lang, {
         ],
       },
       {
-        heading: "Cookies & local storage",
+        heading: "Cookies",
         items: [
           "contact_sent (cookie, httpOnly, 1 hour): technical rate limit after form submission, contains no personal data.",
-          "portfolio_lang (localStorage): stores your language preference locally in your browser, never transmitted.",
         ],
       },
       {
@@ -96,8 +100,8 @@ const content: Record<Lang, {
     rights_heading: "Your rights (revFADP / GDPR)",
     rights: ["Access", "Rectification", "Erasure", "Objection", "Complaint to FDPIC"],
     contact_note: "Requests: eray.cevik.business@gmail.com",
+    impressum_label: "Legal Notice",
   },
-
   tr: {
     title: "Gizlilik Politikası",
     back: "← Geri",
@@ -117,10 +121,9 @@ const content: Record<Lang, {
         ],
       },
       {
-        heading: "Çerezler ve yerel depolama",
+        heading: "Çerezler",
         items: [
           "contact_sent (çerez, httpOnly, 1 saat): form gönderimi sonrası teknik hız sınırı, kişisel veri içermez.",
-          "portfolio_lang (localStorage): dil tercihini tarayıcınızda yerel olarak saklar, iletilmez.",
         ],
       },
       {
@@ -140,16 +143,35 @@ const content: Record<Lang, {
     rights_heading: "Haklarınız (revFADP / GDPR)",
     rights: ["Erişim", "Düzeltme", "Silme", "İtiraz", "FDPIC'e şikayet"],
     contact_note: "Talepler: eray.cevik.business@gmail.com",
+    impressum_label: "Künye",
   },
 };
 
-export default function DatenschutzPage() {
-  const { lang } = useLang();
-  const c = content[lang as Lang];
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  if (!isLocale(lang)) return {};
+  return { title: content[lang].title };
+}
+
+export default async function DatenschutzPage({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}) {
+  const { lang } = await params;
+  if (!isLocale(lang)) notFound();
+  const c = content[lang];
 
   return (
     <main className="mx-auto max-w-2xl px-6 pb-28 pt-36 md:px-10">
-      <Link href="/#hero" className="mb-12 inline-flex font-mono text-[11px] uppercase tracking-[0.22em] text-white/40 transition hover:text-white/70">
+      <Link
+        href={`/${lang}#hero`}
+        className="mb-12 inline-flex font-mono text-[11px] uppercase tracking-[0.22em] text-white/40 transition hover:text-white/70"
+      >
         {c.back}
       </Link>
       <h1 className="mb-10 text-4xl font-medium tracking-tight">{c.title}</h1>
@@ -182,8 +204,8 @@ export default function DatenschutzPage() {
 
       <div className="mt-14 flex items-center justify-between border-t border-white/8 pt-6">
         <p className="font-mono text-[11px] text-white/20">{c.updated}</p>
-        <Link href="/impressum" className="font-mono text-[11px] text-white/25 transition hover:text-white/50">
-          {lang === "de" ? "Impressum" : lang === "en" ? "Legal Notice" : "Künye"} →
+        <Link href={`/${lang}/impressum`} className="font-mono text-[11px] text-white/25 transition hover:text-white/50">
+          {c.impressum_label} →
         </Link>
       </div>
     </main>

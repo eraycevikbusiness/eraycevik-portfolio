@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useT } from "@/lib/i18n";
+import { useT, useLang } from "@/lib/i18n";
 
 function AuroraBg() {
   return (
@@ -16,6 +16,7 @@ function AuroraBg() {
 
 export function ContactSection() {
   const t = useT().contact;
+  const { lang } = useLang();
   const [data, setData] = useState({ name: "", email: "", subject: "", message: "", website: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error" | "rate_limited">("idle");
   const [retryAt, setRetryAt] = useState<number | null>(null);
@@ -41,7 +42,7 @@ export function ContactSection() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, lang }),
       });
       if (res.status === 429) {
         const json = await res.json().catch(() => ({}));

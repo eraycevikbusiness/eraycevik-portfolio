@@ -1,8 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { isLocale, type Locale } from "@/lib/i18n/config";
 
 const COOLDOWN_MS = 60 * 60 * 1000; // 1 hour
 const COOKIE = "contact_sent";
+
+const subjectFallback: Record<Locale, string> = {
+  de: "Portfolio · Neue Anfrage",
+  en: "Portfolio · New inquiry",
+  tr: "Portföy · Yeni talep",
+};
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function sanitizeHeader(s: string): string {
+  return s.replace(/[\r\n]+/g, " ").trim();
+}
 
 export async function POST(req: NextRequest) {
   // Cookie-based rate limit — works across serverless restarts
@@ -24,11 +44,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true }); // silently discard
   }
 
-  const { name, email, subject, message } = body;
+  const { name, email, subject, message, lang } = body;
 
   if (!name?.trim()) return NextResponse.json({ error: "missing_name" }, { status: 400 });
   if (!/^\S+@\S+\.\S+$/.test(email ?? "")) return NextResponse.json({ error: "invalid_email" }, { status: 400 });
   if ((message ?? "").trim().length < 10) return NextResponse.json({ error: "message_too_short" }, { status: 400 });
+
+  const safeName = sanitizeHeader(name).slice(0, 120);
+  const safeEmail = sanitizeHeader(email);
+  const safeSubject = subject ? sanitizeHeader(subject).slice(0, 200) : "";
+  const locale: Locale = isLocale(lang ?? "") ? (lang as Locale) : "de";
+  const finalSubject = safeSubject || subjectFallback[locale];
 
   const smtpUser = process.env.SMTP_USER;
   const smtpPass = process.env.SMTP_PASS;
@@ -44,12 +70,12 @@ export async function POST(req: NextRequest) {
   });
 
   await transporter.sendMail({
-    from: `"Portfolio Contact" <${smtpUser}>`,
+    from: { name: "Portfolio Contact", address: smtpUser },
     to: "eray.cevik.business@gmail.com",
-    replyTo: `"${name}" <${email}>`,
-    subject: subject?.trim() || "Portfolio · Neue Anfrage",
-    text: `${message}\n\n— ${name} <${email}>`,
-    html: `<p>${message.replace(/\n/g, "<br>")}</p><hr><p><small>${name} &lt;${email}&gt;</small></p>`,
+    replyTo: { name: safeName, address: safeEmail },
+    subject: finalSubject,
+    text: `${message}\n\n— ${safeName} <${safeEmail}>`,
+    html: `<p>${escapeHtml(message).replace(/\n/g, "<br>")}</p><hr><p><small>${escapeHtml(safeName)} &lt;${escapeHtml(safeEmail)}&gt;</small></p>`,
   });
 
   const res = NextResponse.json({ ok: true });
