@@ -1,27 +1,95 @@
 @import "tailwindcss";
 
-:root {
+/* Enables `light:` modifier for utility classes when [data-theme="light"]
+   is set on <html>. */
+@custom-variant light (&:where([data-theme="light"] *));
+
+/* ── Theme tokens ────────────────────────────────────────────────────── */
+/* Tokens are aliased onto Tailwind's color namespace so that classes like
+   text-white/40, bg-black, bg-ink-100 automatically flip with the theme.
+   Brand colors (violet, fuchsia, cyan) remain theme-agnostic. */
+
+:root,
+:root[data-theme="dark"] {
   color-scheme: dark;
+
+  --ek-fg:        #fafafa;
+  --ek-bg:        #000000;
+  --ek-ink-0:     #000000;
+  --ek-ink-50:    #0a0a0a;
+  --ek-ink-100:   #0f0f10;
+  --ek-ink-200:   #151517;
+  --ek-ink-300:   #1a1a1d;
+  --ek-ink-400:   #232327;
+  --ek-ink-500:   #2e2e34;
+
+  --ek-line:           rgba(255, 255, 255, 0.08);
+  --ek-grid:           rgba(255, 255, 255, 0.04);
+  --ek-dot:            rgba(255, 255, 255, 0.08);
+  --ek-noise-blend:    overlay;
+  --ek-noise-opacity:  0.5;
+  --ek-scrollbar-track: #000000;
+  --ek-scrollbar-thumb: #1a1a1d;
+  --ek-scrollbar-thumb-hover: #2e2e34;
+
+  --ek-radial-top:     rgba(167, 139, 250, 0.10);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* In light mode, "white" tokens become near-black foreground colors,
+     and "black"/"ink" tokens become near-white surfaces. */
+  --ek-fg:        #0a0a0c;
+  --ek-bg:        #fafafa;
+  --ek-ink-0:     #ffffff;
+  --ek-ink-50:    #f6f6f7;
+  --ek-ink-100:   #f1f1f3;
+  --ek-ink-200:   #e9e9ec;
+  --ek-ink-300:   #dededf;
+  --ek-ink-400:   #cccccf;
+  --ek-ink-500:   #b6b6bb;
+
+  --ek-line:           rgba(10, 10, 12, 0.10);
+  --ek-grid:           rgba(10, 10, 12, 0.06);
+  --ek-dot:            rgba(10, 10, 12, 0.10);
+  --ek-noise-blend:    multiply;
+  --ek-noise-opacity:  0.18;
+  --ek-scrollbar-track: #f1f1f3;
+  --ek-scrollbar-thumb: #cccccf;
+  --ek-scrollbar-thumb-hover: #b6b6bb;
+
+  --ek-radial-top:     rgba(167, 139, 250, 0.14);
 }
 
 @theme inline {
-  --color-background: #000000;
-  --color-foreground: #ffffff;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+  /* Foreground/background helpers if a component wants explicit semantic
+     colors instead of the flipped white/black tokens. */
+  --color-background: var(--ek-bg);
+  --color-foreground: var(--ek-fg);
+  --color-fg:         var(--ek-fg);
+  --color-bg:         var(--ek-bg);
 
-  --color-ink-0:   #000000;
-  --color-ink-50:  #0a0a0a;
-  --color-ink-100: #0f0f10;
-  --color-ink-200: #151517;
-  --color-ink-300: #1a1a1d;
-  --color-ink-400: #232327;
-  --color-ink-500: #2e2e34;
+  /* Override Tailwind defaults so `bg-black`, `text-white/40`, etc.
+     pick up theme-appropriate values. */
+  --color-white: var(--ek-fg);
+  --color-black: var(--ek-bg);
+
+  --color-ink-0:   var(--ek-ink-0);
+  --color-ink-50:  var(--ek-ink-50);
+  --color-ink-100: var(--ek-ink-100);
+  --color-ink-200: var(--ek-ink-200);
+  --color-ink-300: var(--ek-ink-300);
+  --color-ink-400: var(--ek-ink-400);
+  --color-ink-500: var(--ek-ink-500);
 
   --color-accent-violet:  #a78bfa;
   --color-accent-fuchsia: #e879f9;
   --color-accent-cyan:    #67e8f9;
+
+  --font-sans:  var(--font-geist-sans);
+  --font-mono:  var(--font-geist-mono);
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
 
   --animate-marquee-l: marquee-l 40s linear infinite;
   --animate-marquee-r: marquee-r 40s linear infinite;
@@ -31,9 +99,10 @@
   --animate-spin-slow: spin 26s linear infinite;
 }
 
+/* ── Base ───────────────────────────────────────────────────────────── */
 html, body {
-  background: #000;
-  color: #fafafa;
+  background: var(--ek-bg);
+  color: var(--ek-fg);
 }
 
 body {
@@ -42,12 +111,12 @@ body {
 }
 
 * {
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--ek-line);
 }
 
 ::selection {
   background: #a78bfa;
-  color: #000;
+  color: #ffffff;
 }
 
 html {
@@ -55,19 +124,20 @@ html {
 }
 
 ::-webkit-scrollbar { width: 10px; height: 10px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: #1a1a1d; border-radius: 8px; border: 2px solid #000; }
-::-webkit-scrollbar-thumb:hover { background: #2e2e34; }
+::-webkit-scrollbar-track { background: var(--ek-scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--ek-scrollbar-thumb); border-radius: 8px; border: 2px solid var(--ek-scrollbar-track); }
+::-webkit-scrollbar-thumb:hover { background: var(--ek-scrollbar-thumb-hover); }
 
+/* ── Utilities (theme-aware) ────────────────────────────────────────── */
 .bg-grid {
   background-image:
-    linear-gradient(to right, rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.04) 1px, transparent 1px);
+    linear-gradient(to right, var(--ek-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--ek-grid) 1px, transparent 1px);
   background-size: 56px 56px;
 }
 
 .bg-dot {
-  background-image: radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px);
+  background-image: radial-gradient(var(--ek-dot) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 
@@ -137,8 +207,8 @@ html {
   inset: 0;
   pointer-events: none;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  mix-blend-mode: overlay;
-  opacity: 0.5;
+  mix-blend-mode: var(--ek-noise-blend);
+  opacity: var(--ek-noise-opacity);
 }
 
 /* Project card hover */
@@ -174,12 +244,12 @@ html {
   gap: 6px;
   padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: color-mix(in srgb, var(--ek-fg) 3%, transparent);
+  border: 1px solid var(--ek-line);
   font-size: 11px;
   letter-spacing: 0.04em;
   font-family: var(--font-mono), monospace;
-  color: rgba(255,255,255,0.75);
+  color: color-mix(in srgb, var(--ek-fg) 75%, transparent);
 }
 
 @keyframes marquee-l {
@@ -206,4 +276,9 @@ html {
   0%   { transform: rotate(215deg) translateX(0); opacity: 1; }
   70%  { opacity: 1; }
   100% { transform: rotate(215deg) translateX(-700px); opacity: 0; }
+}
+
+/* Reduce visual noise of meteors in light mode (white streaks become invisible) */
+:root[data-theme="light"] .meteor-trail {
+  background: linear-gradient(90deg, rgba(10,10,12,0.6), transparent) !important;
 }

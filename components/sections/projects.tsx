@@ -47,7 +47,7 @@ function ProjectCard({ p, index }: { p: ReturnType<typeof useT>["projects"]["ite
           {p.glyph}
         </div>
         <div className="absolute left-5 top-5 flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+          <span className="h-2 w-2 rounded-full bg-emerald-400 light:bg-emerald-600 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-white/60">{p.tag}</span>
         </div>
         <div className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-black/40 backdrop-blur transition group-hover:border-white/40 group-hover:bg-white/10">

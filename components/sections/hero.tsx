@@ -86,7 +86,7 @@ function Meteors({ count = 14 }: { count?: number }) {
           style={{
             top: `${m.top}%`,
             left: `${m.left}%`,
-            background: "linear-gradient(90deg, white, transparent)",
+            background: "linear-gradient(90deg, var(--ek-fg), transparent)",
             animation: `meteor ${m.duration}s linear ${m.delay}s infinite`,
             opacity: 0.6,
           }}
@@ -122,7 +122,7 @@ export function HeroSection() {
       <BackgroundBeams className="opacity-40" />
       <Meteors count={14} />
       <div className="spotlight pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(ellipse 90% 60% at 50% 100%, rgba(0,0,0,0.9), transparent 60%)" }} />
+      <div className="pointer-events-none absolute inset-0" style={{ background: "radial-gradient(ellipse 90% 60% at 50% 100%, color-mix(in srgb, var(--ek-bg) 90%, transparent), transparent 60%)" }} />
 
       <div className="relative mx-auto w-full max-w-7xl px-6 pt-32 pb-20 md:px-10">
         <motion.div
@@ -132,7 +132,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mb-8 inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/3 py-1.5 pl-1.5 pr-4 backdrop-blur"
         >
-          <span className="rounded-full bg-emerald-500/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-emerald-300">
+          <span className="rounded-full bg-emerald-500/15 light:bg-emerald-600/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-emerald-300 light:text-emerald-700">
             {t.hero.status}
           </span>
           <span className="text-[12px] text-white/70">{t.hero.role}</span>

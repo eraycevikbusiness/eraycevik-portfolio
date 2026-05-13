@@ -19,15 +19,15 @@ const TECH: Record<string, { slug: string; color: string }> = {
   "JavaScript":       { slug: "javascript",         color: "#F7DF1E" },
   "React":            { slug: "react",              color: "#61DAFB" },
   "React Native":     { slug: "react",              color: "#61DAFB" },
-  "Next.js":          { slug: "nextdotjs",          color: "#FFFFFF" },
-  "Expo":             { slug: "expo",               color: "#FFFFFF" },
+  "Next.js":          { slug: "nextdotjs",          color: "var(--ek-fg)" },
+  "Expo":             { slug: "expo",               color: "var(--ek-fg)" },
   "Tailwind CSS":     { slug: "tailwindcss",        color: "#06B6D4" },
   "HTML":             { slug: "html5",              color: "#E34F26" },
   "CSS":              { slug: "css3",               color: "#1572B6" },
   "Node.js":          { slug: "nodedotjs",          color: "#5FA04E" },
   "Claude AI":        { slug: "anthropic",          color: "#D97757" },
   "Git":              { slug: "git",                color: "#F05032" },
-  "GitHub":           { slug: "github",             color: "#FFFFFF" },
+  "GitHub":           { slug: "github",             color: "var(--ek-fg)" },
   "GitHub Actions":   { slug: "githubactions",      color: "#2088FF" },
   "MongoDB":          { slug: "mongodb",            color: "#47A248" },
   "SQL":              { slug: "mysql",              color: "#F29111" },
@@ -67,10 +67,14 @@ function TechIcon({ name, size = 14 }: { name: string; size?: number }) {
 
   if (!t) return <span className="inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-white/35" aria-hidden />;
 
+  const glow = t.color.startsWith("var(")
+    ? `color-mix(in srgb, ${t.color} 40%, transparent)`
+    : `${t.color}66`;
+
   return (
     <span
       className="inline-grid shrink-0 place-items-center"
-      style={{ width: size, height: size, color: t.color, filter: `drop-shadow(0 0 6px ${t.color}66)` }}
+      style={{ width: size, height: size, color: t.color, filter: `drop-shadow(0 0 6px ${glow})` }}
       aria-hidden
       dangerouslySetInnerHTML={svg ? { __html: svg } : undefined}
     >
@@ -354,7 +358,7 @@ export function SkillsSection() {
           className="md:col-span-6"
           title={t.cards[3][0]} desc={t.cards[3][1]}
           badges={["Git", "GitHub Actions", "Docker", "NuGet"]}
-          accentClass="text-emerald-400" kicker={t.kickers[3]}
+          accentClass="text-emerald-400 light:text-emerald-600" kicker={t.kickers[3]}
           visual={<OssVisual />}
         />
       </div>

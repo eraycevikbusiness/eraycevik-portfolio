@@ -7,6 +7,7 @@ import { Footer } from "@/components/footer";
 import { LanguageProvider } from "@/lib/i18n";
 import { isLocale, locales, ogLocaleMap, defaultLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { ThemeProvider, themeInitScript } from "@/lib/theme";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -108,17 +109,22 @@ export default async function LocaleLayout({
   const dict = await getDictionary(lang as Locale);
 
   return (
-    <html lang={lang} className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}>
-      <body className="min-h-screen bg-black text-white">
-        <LanguageProvider lang={lang as Locale} dict={dict}>
-          <div
-            className="pointer-events-none fixed inset-x-0 top-0 z-1 h-[60vh] opacity-60"
-            style={{ background: "radial-gradient(ellipse 60% 100% at 50% 0%, rgba(167,139,250,0.10), transparent 60%)" }}
-          />
-          <Navbar />
-          {children}
-          <Footer />
-        </LanguageProvider>
+    <html lang={lang} suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className="min-h-screen bg-bg text-fg">
+        <ThemeProvider>
+          <LanguageProvider lang={lang as Locale} dict={dict}>
+            <div
+              className="pointer-events-none fixed inset-x-0 top-0 z-1 h-[60vh] opacity-60"
+              style={{ background: "radial-gradient(ellipse 60% 100% at 50% 0%, var(--ek-radial-top), transparent 60%)" }}
+            />
+            <Navbar />
+            {children}
+            <Footer />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

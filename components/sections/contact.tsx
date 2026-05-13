@@ -247,8 +247,8 @@ export function ContactSection() {
 
           <div className="mt-6 flex items-center gap-3 rounded-2xl border border-white/10 bg-ink-100/30 p-5">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-60" />
-              <span className="relative h-2.5 w-2.5 rounded-full bg-emerald-400" />
+              <span className="absolute inset-0 animate-ping rounded-full bg-emerald-400 light:bg-emerald-600 opacity-60" />
+              <span className="relative h-2.5 w-2.5 rounded-full bg-emerald-400 light:bg-emerald-600" />
             </span>
             <div className="text-sm text-white/70">
               {t.avail[0]} <span className="text-white">{t.avail[1]}</span> {t.avail[2]} <span className="text-white">{t.avail[3]}</span>

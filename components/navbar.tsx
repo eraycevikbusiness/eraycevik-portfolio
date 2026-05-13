@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { useLang, useT, type Locale } from "@/lib/i18n";
 import { localeNames } from "@/lib/i18n/config";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function Flag({ code, className = "h-3.5 w-5" }: { code: Locale; className?: string }) {
   const cls = `${className} rounded-[3px] ring-1 ring-white/15 overflow-hidden block shrink-0`;
@@ -162,7 +163,7 @@ export function Navbar() {
               <div className="grid h-9 w-9 place-items-center rounded-lg border border-white/15 bg-black font-mono text-[12px] font-semibold tracking-tight">
                 <span>EK</span>
               </div>
-              <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
+              <span className="absolute -right-0.5 -top-0.5 h-1.5 w-1.5 rounded-full bg-emerald-400 light:bg-emerald-600 shadow-[0_0_10px_rgba(52,211,153,0.7)]" />
             </div>
             <div className="hidden flex-col gap-1.5 md:flex">
               <span className="text-[13px] font-medium tracking-tight">Eray Kaan Cevik</span>
@@ -189,8 +190,9 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right: language + CTA */}
+          {/* Right: theme + language + CTA */}
           <div className="flex items-center gap-2">
+            <ThemeToggle />
             <LanguageSwitcher />
             <div className="hidden md:block">
               <a
